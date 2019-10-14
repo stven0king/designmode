@@ -6,34 +6,39 @@ package com.tzx.build;
  */
 public class Person {
     private String name;
-    private String atge;
+    private String age;
     private double height;
     private double weight;
 
-    public Person(String name, String atge, double height, double weight) {
-        this.name = name;
-        this.atge = atge;
-        this.height = height;
-        this.weight = weight;
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setAtge(String atge) {
-        this.atge = atge;
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public double getHeight() {
+        return height;
     }
 
     public void setHeight(double height) {
         this.height = height;
     }
 
-    public void setWeight(double weight) {
-        this.weight = weight;
+    public double getWeight() {
+        return weight;
     }
 
-    public static class Bulider {
-
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 }
