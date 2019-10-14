@@ -1,5 +1,6 @@
 # designmode
 
+
 ## 工厂模式（Factory）
 
 ### 模式定义
@@ -731,4 +732,65 @@ static final class ExecutorCallbackCall<T> implements Call<T> {
 ```
 
 使用原型模式复制对象需要主要深拷贝与浅拷贝的问题。Object类的clone方法只会拷贝对象中的基本的数据类型，对于数组、容器对象、引用对象等都不会拷贝，这就是浅拷贝。如果要实现深拷贝，必须将原型模式中的数组、容器对象、引用对象等另行拷贝。
+
+## 单例模式（Singleton）
+
+## 模式定义
+
+包路径：`com.tzx.singleton`
+
+这种类型的设计模式属于创建型模式，它提供了一种创建对象的最佳方式。
+
+这种模式涉及到一个单一的类，该类负责创建自己的对象，同时确保只有单个对象被创建。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。
+
+注意：
+
+>- 1、单例类只能有一个实例。
+>- 2、单例类必须自己创建自己的唯一实例。
+>- 3、单例类必须给所有其他对象提供这一实例。
+
+具体查看 [Java版的7种单例模式](https://dandanlove.blog.csdn.net/article/details/101759634)
+
+### 具体说明
+
+`Retrofit` 中也使用了大量的**单例模式**，比如 `BuiltInConverters` 的 `responseBodyConverter`、`requestBodyConverter` 等，并且使用了**饿汉式的单例模式**。
+
+```java
+final class BuiltInConverters extends Converter.Factory {
+    @Override
+    public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations,
+        Retrofit retrofit) {
+        if (type == ResponseBody.class) {
+            return Utils.isAnnotationPresent(annotations, Streaming.class)
+            ? StreamingResponseBodyConverter.INSTANCE
+            : BufferingResponseBodyConverter.INSTANCE;
+        }
+        if (type == Void.class) {
+            return VoidResponseBodyConverter.INSTANCE;
+        }
+        return null;
+    }
+  
+    @Override
+    public Converter<?, RequestBody> requestBodyConverter(Type type,
+        Annotation[] parameterAnnotations, Annotation[] methodAnnotations, Retrofit retrofit) {
+        if (RequestBody.class.isAssignableFrom(Utils.getRawType(type))) {
+            return RequestBodyConverter.INSTANCE;
+        }
+        return null;
+    }
+  
+    static final class VoidResponseBodyConverter implements Converter<ResponseBody, Void> {
+       static final VoidResponseBodyConverter INSTANCE = new VoidResponseBodyConverter();
+       @Override 
+       public Void convert(ResponseBody value) throws IOException {
+            value.close();
+            return null;
+       }
+    }
+    /***部分代码省略***/
+}
+```
+
+
 
