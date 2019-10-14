@@ -17,7 +17,7 @@
 
 ### 简单工厂模式
 
-![](/Users/tanzx/IdeaProjects/designmode/img/simple-factory.jpg)
+![](./img/simple-factory.jpg)
 
 实例化对象的时候不再使用 new Object()形式，可以根据用户的选择条件来实例化相关的类。对于客户端来说，去除了具体的类的依赖。只需要给出具体实例的描述给工厂，工厂就会自动返回具体的实例对象。
 
@@ -72,7 +72,7 @@ static class IOS extends Platform {}
 
 如果上面的**简单工厂**模式中，创建每一个 `Shape` 都需要大量的逻辑代码，而且 `Shape` 的类型还不少。那么这个时候我们维护这个 `Factroy` 就比较费力了。
 
-![](/Users/tanzx/IdeaProjects/designmode/img/factory.jpeg)
+![](./img/factory.jpeg)
 
 抽象产品类派生出多个具体产品类；
 
@@ -124,7 +124,7 @@ public final class RxJavaCallAdapterFactory extends CallAdapter.Factory {
 
 相比于工厂模式，具体工厂负责生产具体的产品，每一个具体工厂对应一种具体产品，工厂方法也具有唯一性，一般情况下，一个具体工厂中只有一个工厂方法或者一组重载的工厂方法。但是有时候我们需要一个工厂可以提供多个产品对象，而不是单一的产品对象。
 
-![](/Users/tanzx/IdeaProjects/designmode/img/abstract-factory.jpg)
+![](./img/abstract-factory.jpg)
 
 - 一个系统不应当依赖于产品类实例如何被创建、组合和表达的细节，这对于所有形态的工厂模式都是重要的。
 -  这个系统有多于一个的产品族，而系统只消费其中某一产品族。
@@ -210,13 +210,13 @@ public final class GsonConverterFactory extends Converter.Factory {
 
 ### 类适配器
 
-![](/Users/tanzx/IdeaProjects/designmode/img/class-adapter.jpg)
+![](./img/class-adapter.jpg)
 
 类适配器，Adapter 类既继承了 Adaptee （被适配类），也实现了 Target 接口
 
 ### 对象适配器
 
-![](/Users/tanzx/IdeaProjects/designmode/img/object-adapter.png)
+![](./img/object-adapter.png)
 
 ### 优点
 
@@ -326,7 +326,7 @@ CallAdapter<Object, Call<?>>() {
 > - Facade: 外观角色
 > - SubSystem:子系统角色
 
-![](/Users/tanzx/IdeaProjects/designmode/img/Facade.png)
+![](./img/Facade.png)
 
 ### 模式分析
 
@@ -378,7 +378,7 @@ CallAdapter<Object, Call<?>>() {
 >- ConcreteBuilder实际建造类——继承自Builder，构建具体的Product；
 >- Director组装类——统一组装过程。
 
-![](/Users/tanzx/IdeaProjects/designmode/img/builder.jpeg)
+![](./img/builder.jpeg)
 
 主要解决在软件系统中，有时候面临着"一个复杂对象"的创建工作，其通常由各个部分的子对象用一定的算法构成；由于需求的变化，这个复杂对象的各个部分经常面临着剧烈的变化，但是将它们组合在一起的算法却相对稳定。
 
@@ -432,7 +432,7 @@ Retrofit retrofit = new Retrofit.Builder()
 >- Proxy: 代理主题角色，代理对象内部含有目标对象的引用，从而可以在任何时候操作目标对象；代理对象提供一个与目标对象相同的接口，以便可以在任何时候替代目标对象。代理对象通常在客户端调用传递给目标对象之前或之后，执行某个操作，而不是单纯地将调用传递给目标对象。
 >- RealSubject: 真实主题角色，定义了代理对象所代表的目标对象。
 
-![](/Users/tanzx/IdeaProjects/designmode/img/proxy.png)
+![](./img/proxy.png)
 
 ### 分类
 
@@ -542,7 +542,7 @@ public <T> T create(final Class<T> service) {
 >- 抽象策略(Strategy)角色：这是一个抽象角色，通常由一个接口或抽象类实现。此角色给出所有的具体策略类所需的接口。
 >- 具体策略(ConcreteStrategy)角色：包装了相关的算法或行为。
 
-![](/Users/tanzx/IdeaProjects/designmode/img/strategy.png)
+![](./img/strategy.png)
 
 ### 认识策略模式
 
@@ -638,7 +638,7 @@ CallAdapter<Object, Call<?>>() {
 >- UnsharedConcreteFlyweight: 非共享具体享元类
 >- FlyweightFactory: 享元工厂类
 
-![](/Users/tanzx/IdeaProjects/designmode/img/Flyweight.jpg)
+![](./img/Flyweight.jpg)
 
 ### 优点
 
@@ -692,7 +692,7 @@ ServiceMethod loadServiceMethod(Method method) {
 >- 抽象原型(Prototype)角色：这是一个抽象角色，通常由一个Java接口或Java抽象类实现。此角色给出所有的具体原型类所需的接口。
 >- 具体原型（Concrete Prototype）角色：被复制的对象。此角色需要实现抽象的原型角色所要求的接口。
 
-![](/Users/tanzx/IdeaProjects/designmode/img/prototype.png)
+![](./img/prototype.png)
 
 **优点：** 
 
