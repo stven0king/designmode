@@ -751,7 +751,7 @@ static final class ExecutorCallbackCall<T> implements Call<T> {
 
 具体查看 [Java版的7种单例模式](https://dandanlove.blog.csdn.net/article/details/101759634)
 
-### 具体说明
+### 举例说明
 
 `Retrofit` 中也使用了大量的**单例模式**，比如 `BuiltInConverters` 的 `responseBodyConverter`、`requestBodyConverter` 等，并且使用了**饿汉式的单例模式**。
 
@@ -792,5 +792,90 @@ final class BuiltInConverters extends Converter.Factory {
 }
 ```
 
+## 观察者模式（observer）
 
+包路径: `com.tzx.observer`
 
+### 模式定义
+
+建立一种对象与对象之间的依赖关系，一个对象发生改变时将自动通知其他对象，其他对象将相应做出反应。在此，发生改变的对象称为观察目标，而被通知的对象称为观察者，一个观察目标可以对应多个观察者，而且这些观察者之间没有相互联系，可以根据需要增加和删除观察者，使得系统更易于扩展，这就是观察者模式的模式动机。
+
+### 模式结构
+
+观察者模式所涉及的角色有：
+
+>- 抽象主题(Subject)角色：抽象主题角色把所有对观察者对象的引用保存在一个聚集（比如ArrayList对象）里，每个主题都可以有任何数量的观察者。抽象主题提供一个接口，可以增加和删除观察者对象，抽象主题角色又叫做抽象被观察者(Observable)角色。
+>- 具体主题(ConcreteSubject)角色：将有关状态存入具体观察者对象；在具体主题的内部状态改变时，给所有登记过的观察者发出通知。具体主题角色又叫做具体被观察者(Concrete Observable)角色。
+>- 抽象观察者(Observer)角色：为所有的具体观察者定义一个接口，在得到主题的通知时更新自己，这个接口叫做更新接口。
+>- 具体观察者(ConcreteObserver)角色：存储与主题的状态自恰的状态。具体观察者角色实现抽象观察者角色所要求的更新接口，以便使本身的状态与主题的状态 像协调。如果需要，具体观察者角色可以保持一个指向具体主题对象的引用。
+
+![](/Users/tanzx/IdeaProjects/designmode/img/subject.png)
+
+### **推模型和拉模型**
+
+在观察者模式中，又分为推模型和拉模型两种方式。
+
+**推模型**
+主题对象向观察者推送主题的详细信息，不管观察者是否需要，推送的信息通常是主题对象的全部或部分数据。
+
+**拉模型**
+
+主题对象在通知观察者的时候，只传递少量信息。如果观察者需要更具体的信息，由观察者主动到主题对象中获取，相当于是观察者从主题对象中拉数据。一般这种模型的实现中，会把主题对象自身通过update()方法传递给观察者，这样在观察者需要获取数据的时候，就可以通过这个引用来获取了。
+
+### 举例说明
+
+网络请求相关的库一般都是会支持请求的异步发送，通过在库内部维护一个队列，将请求添加到该队列，同时注册一个回调接口，以便执行引擎完成该请求后，将请求结果进行回调。
+
+`Retrofit` 的网络请求执行引擎是 `OkHttp` ，请求类是 `OkHttpCall` ，其实现了 `Call` 接口，`enqueue` 方法如下，入参为 `Callback`对象。
+
+```java
+@Override public void enqueue(final Callback<T> callback) {
+    checkNotNull(callback, "callback == null");
+    okhttp3.Call call;
+    Throwable failure;
+    /***部分代码省略***/
+    call.enqueue(new okhttp3.Callback() {
+      @Override public void onResponse(okhttp3.Call call, okhttp3.Response rawResponse)
+          throws IOException {
+        Response<T> response;
+        try {
+          response = parseResponse(rawResponse);
+        } catch (Throwable e) {
+          callFailure(e);
+          return;
+        }
+        callSuccess(response);
+      }
+
+      @Override public void onFailure(okhttp3.Call call, IOException e) {
+        try {
+          callback.onFailure(OkHttpCall.this, e);
+        } catch (Throwable t) {
+          t.printStackTrace();
+        }
+      }
+      private void callFailure(Throwable e) {
+        try {
+          callback.onFailure(OkHttpCall.this, e);
+        } catch (Throwable t) {
+          t.printStackTrace();
+        }
+      }
+      private void callSuccess(Response<T> response) {
+        try {
+          callback.onResponse(OkHttpCall.this, response);
+        } catch (Throwable t) {
+          t.printStackTrace();
+        }
+      }
+    });
+  }
+```
+
+- `Call`：`Subject` 抽象的被观察者；
+
+- `OkHttpCall`：`ConcreteSubject` 具体的被观察者；
+
+- `Callback`：`Observer` 抽象的观察者；
+
+- `Callback`的实现类：`ConcreteObserver` 具体观察者的实现；
